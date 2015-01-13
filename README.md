@@ -12,7 +12,10 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 	* Create a workspace to build the docker images
 	* `git clone https://github.com/INAETICS/node-provisioning-service.git && cd node-provisioning-service && docker build -t 172.17.8.2:5000/inaetics/provisioning .`
 	* `git clone https://github.com/INAETICS/node-agent-service.git && cd node-agent-service && docker build -t 172.17.8.2:5000/inaetics/felix-agent .`
-	* `git clone https://github.com/INAETICS/celix-node-provisioning-service.git && cd celix-node-provisioning-service && docker build -t 172.17.8.2:5000/inaetics/celix-agent .`
+	* `git clone https://github.com/INAETICS/celix-node-agent-service.git && cd celix-node-agent-service && docker build -t 172.17.8.2:5000/inaetics/celix-agent .`
+	* `docker push 172.17.8.2:5000/inaetics/provisioning`
+	* `docker push 172.17.8.2:5000/inaetics/felix-agent`
+	* `docker push 172.17.8.2:5000/inaetics/celix-agent`
 * Run `cd workers && vagrant up`
 * Wait until are workers are started (default 10). 
 * Run `cd workers && vagrant ssh worker-1`
