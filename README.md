@@ -2,7 +2,7 @@
 
 This repository containts an INAETICS cluster environment based on fleet preconfigured for vagrant (virtualbox)
 
-#Run the cluster in Vagrant
+##Run the cluster in Vagrant
 
 * Install Git, Docker, VirtualBox & Vagrant
 * Clone this repository
@@ -18,19 +18,19 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 * Run `cd workers && vagrant ssh worker-1`
 * Run `/opt/inaetics/bin/inaetics_fleet_manager.sh --start`
 
-#Starting and reconfiguring the demonstrator
+##Starting and reconfiguring the demonstrator
 TODO
 
-#Bootstrap 
+##Bootstrap 
 TODO explain the etcd discovery cluster & explain the docker service registry
 
-#Workers 
+##Workers 
 TODO explain the workers (fleet configuration)
 
-#Update the docker images 
+##Update the docker images 
 TODO explain how the the docker images in the docker registry can be updated
 
-#Known shortcomming
+##Known shortcomming
 * The cluster still needs a external etcd to be able to bootstrap the cluster
 * The docker registry service is still external, this can be moved to the cluster workers
 
