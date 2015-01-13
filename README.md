@@ -19,7 +19,7 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 * Run `cd workers && vagrant up`
 * Wait until are workers are started (default 10). 
 * Run `cd workers && vagrant ssh worker-1`
-* Run `/opt/inaetics/bin/inaetics_fleet_manager.sh --start`
+* Run `inaetics_fleet_manager --start`
 
 ##Starting and reconfiguring the demonstrator
 TODO
