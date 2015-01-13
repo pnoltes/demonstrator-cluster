@@ -1,0 +1,32 @@
+#cloud-config
+
+coreos:
+  etcd:
+    name: worker-$public_ipv4
+    discovery: http://172.17.8.2:4001/v2/keys/_etcd/registry/inaetics-cluster-1
+    addr: $public_ipv4:4001
+    bind-addr: 0.0.0.0
+    peer-addr: $public_ipv4:7001
+    peer-bind-addr: 0.0.0.0
+    #peers : 172.17.8.101:7001
+  fleet:
+    public-ip: $public_ipv4
+  units:
+    - name: etcd.service
+      command: start
+    - name: fleet.service
+      command: start
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=4243
+        Service=docker.service
+        BindIPv6Only=both
+
+        [Install]
+        WantedBy=sockets.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=Felix Node Agent
+Documentation=https://github.com/INAETICS
+
+[Service]
+ExecStart=/opt/inaetics/fleet/bin/felix_agent.sh --hostname=%H --machineId=%m --start
+ExecStop=/opt/inaetics/fleet/bin/felix_agent.sh --hostname=%H --machineId=%m --stop
+
+Restart=always
+RestartSec=10
+
+[X-Fleet]
+Conflicts=celix@*.service
+Conflicts=felix@*.service
+Conflicts=provision.service
+
