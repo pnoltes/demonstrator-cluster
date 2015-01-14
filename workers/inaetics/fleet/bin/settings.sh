@@ -26,15 +26,15 @@ SUBNET_INTERFACE=eth1
 # Etcd config
 ETCD_CLIENT_PORT=4001
 ETCD_PEER_PORT=7001
-ETCD_STARTUP_IMAGE="coreos/etcd:latest"
-ETCD_STARTUP_PEERS="192.168.1.181"
+#ETCD_STARTUP_IMAGE="coreos/etcd:latest"
+#ETCD_STARTUP_PEERS="192.168.1.181"
 
 # External ETCD peer (in case of external ETCD cluster)
-EXTERNAL_ETCD_STARTUP_PEERS="192.168.1.180"
+#EXTERNAL_ETCD_STARTUP_PEERS="192.168.1.180"
 
 # Node provisioning config
-NODE_PROVISIONING_HOST="192.168.1.181"
+#NODE_PROVISIONING_HOST="192.168.1.181"
 
 #Controller config
-CONTROLLER_IMAGE="inaetics/node-controller:latest"
-CONTROLLER_ENTRY="/var/lib/node-controller/node-controller"
+#CONTROLLER_IMAGE="inaetics/node-controller:latest"
+#CONTROLLER_ENTRY="/var/lib/node-controller/node-controller"

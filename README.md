@@ -25,15 +25,15 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 TODO
 
 ##Bootstrap 
-TODO explain the etcd discovery cluster & explain the docker service registry
+TODO explain the etcd discovery cluster & explain the docker service registry.
 
 ##Workers 
-TODO explain the workers (fleet configuration)
+TODO explain the workers (fleet configuration).
 
 ##Update the docker images 
-TODO explain how the the docker images in the docker registry can be updated
+TODO explain how the the docker images in the docker registry can be updated.
 
 ##Known shortcomming
-* The cluster still needs a external etcd to be able to bootstrap the cluster
-* The docker registry service is still external, this can be moved to the cluster workers
-
+* The cluster still needs a external etcd to be able to bootstrap the cluster.
+* The docker registry service is still external, this can be moved to the cluster workers.
+* On Fedora the disableling the dynamic firewall (` sudo systemctl stop firewalld.service`) is needed to be able to push and download docker images.
