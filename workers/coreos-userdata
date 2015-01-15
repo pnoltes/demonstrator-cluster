@@ -1,5 +1,11 @@
 #cloud-config
 
+write_files:
+  - path: /etc/systemd/system/docker.service.d/50-insecure-registry.conf
+    content: |
+        [Service]
+        Environment=DOCKER_OPTS='--insecure-registry="172.17.8.0/24"'
+
 coreos:
   etcd:
     name: worker-$public_ipv4

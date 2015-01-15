@@ -11,5 +11,4 @@ RestartSec=10
 
 [X-Fleet]
 X-Conflicts=celix@*.service
-X-Conflicts=felix@*.service
 

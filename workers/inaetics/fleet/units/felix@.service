@@ -10,7 +10,6 @@ Restart=always
 RestartSec=10
 
 [X-Fleet]
-Conflicts=celix@*.service
 Conflicts=felix@*.service
 Conflicts=provision.service
 
