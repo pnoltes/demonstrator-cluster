@@ -40,8 +40,10 @@ ETCDCTL_PEERS=${MY_IP}:${ETCD_CLIENT_PORT}
 
 if [ ${COMMAND} = "start" ] 
 then
+	/usr/bin/docker pull ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/felix-agent:latest
 	/usr/bin/docker run --rm=true --hostname="felix-${HOSTNAME}" --name="felix-${HOSTNAME}" -p 6667:6666 -p 8080:8080 -p 9001:9001 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/felix-agent:latest /tmp/node-agent.sh felix_${MACHINE_ID} $MY_IP
 else
 	/usr/bin/docker stop "felix-${HOSTNAME}"
 	/usr/bin/docker rm "felix-${HOSTNAME}" 2> /dev/null
+	echo ""
 fi
