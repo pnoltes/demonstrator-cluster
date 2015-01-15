@@ -43,6 +43,6 @@ then
 	/usr/bin/docker run --rm=true --hostname="celix-${HOSTNAME}" --name="celix-${HOSTNAME}" -p 6668:6666 -p 9999:9999 -p 8888:8888 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest /tmp/start_agent.sh celix_${MACHINE_ID} $MY_IP
 else
 	/usr/bin/docker stop "celix-${HOSTNAME}"
-	#/usr/bin/docker rm "celix-${HOSTNAME}"
+	/usr/bin/docker rm "celix-${HOSTNAME}" 2> /dev/null 
 fi
 

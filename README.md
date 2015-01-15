@@ -9,6 +9,10 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 * Run `cd bootstrap && vagrant up`
 * Wait until the boottrap environment is started and the webpage at http://172.17.8.2:5000/v1/search will load
 * Build & Push docker images to the docker repository registry
+	* Configure docker for a insecure registry (private registry) 
+		* For Fedora: add `--insecure-registry 172.17.8.2:5000` to `/etc/sysconfig/docker` 
+	* If needed start docker, generally
+		* For Fedora: `systemctl start docker.service`
 	* Create a workspace to build the docker images
 	* `git clone https://github.com/INAETICS/node-provisioning-service.git && cd node-provisioning-service && docker build -t 172.17.8.2:5000/inaetics/provisioning .`
 	* `git clone https://github.com/INAETICS/node-agent-service.git && cd node-agent-service && docker build -t 172.17.8.2:5000/inaetics/felix-agent .`
