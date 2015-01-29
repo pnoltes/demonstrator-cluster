@@ -3,6 +3,7 @@
 HOSTNAME=""
 MACHINE_ID=""
 COMMAND=""
+INSTANCE_ID=""
 
 for ARG in $*; do
   case ${ARG} in
@@ -18,15 +19,18 @@ for ARG in $*; do
     --machineId=*)
       MACHINE_ID=`echo ${ARG} | cut -d"=" -f2`
     ;;
+    --instanceId=*)
+      INSTANCE_ID=`echo ${ARG} | cut -d"=" -f2`
+    ;;
     *)
 	echo "Unknown argument ${ARG}"
     ;;
   esac
 done
 
-if [[ -z ${HOSTNAME} || -z ${MACHINE_ID} || -z ${COMMAND} ]] 
+if [[ -z ${HOSTNAME} || -z ${MACHINE_ID} || -z ${COMMAND} || -z ${INSTANCE_ID} ]] 
 then
-	echo "Usage $0 --hostname=<hostname> --machineId=<machineid> (--start | --stop)"
+	echo "Usage $0 --hostname=<hostname> --machineId=<machineid> --instanceId=<instanceid> (--start | --stop)"
 	exit 1
 fi
 
@@ -41,7 +45,7 @@ ETCDCTL_PEERS=${MY_IP}:${ETCD_CLIENT_PORT}
 if [ ${COMMAND} = "start" ] 
 then
 	/usr/bin/docker pull ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest
-	/usr/bin/docker run --rm=true --hostname="celix-${HOSTNAME}" --name="celix-${HOSTNAME}" -p 6668:6666 -p 9999:9999 -p 8888:8888 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest /tmp/start_agent.sh celix_${MACHINE_ID} $MY_IP
+	/usr/bin/docker run --rm=true --hostname="celix-${HOSTNAME}" --name="celix-${INSTANCE_ID}" -p 6668:6666 -p 9999:9999 -p 8888:8888 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest /tmp/start_agent.sh celix_${INSTANCE_ID} $MY_IP
 else
 	/usr/bin/docker stop "celix-${HOSTNAME}"
 	/usr/bin/docker rm "celix-${HOSTNAME}" 2> /dev/null 
