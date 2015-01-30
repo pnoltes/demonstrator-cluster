@@ -1,0 +1,9 @@
+[submodule "docker-images/provisioning"]
+	path = docker-images/provisioning
+	url = https://github.com/INAETICS/node-provisioning-service.git
+[submodule "docker-images/felix-agent"]
+	path = docker-images/felix-agent
+	url = https://github.com/INAETICS/node-agent-service.git
+[submodule "docker-images/celix-agent"]
+	path = docker-images/celix-agent
+	url = https://github.com/INAETICS/celix-node-agent-service.git
