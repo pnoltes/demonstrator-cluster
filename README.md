@@ -1,4 +1,4 @@
-#INAETICS cluster
+INAETICS cluster
 
 This repository containts an INAETICS cluster environment based on fleet preconfigured for vagrant (virtualbox)
 
@@ -6,6 +6,9 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 
 * Install Git, Docker, VirtualBox & Vagrant
 * Clone this repository
+* Update docker image submodules
+	* Run `git submodule init`
+	* Run `git submodule update`
 * Run `cd bootstrap && vagrant up`
 * Wait until the boottrap environment is started and the webpage at http://172.17.8.2:5000/v1/search will load
 * Build & Push docker images to the docker repository registry
@@ -13,15 +16,12 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 		* For Fedora: add `--insecure-registry 172.17.8.2:5000` to `/etc/sysconfig/docker` 
 	* If needed start docker, generally
 		* For Fedora: `systemctl start docker.service`
-	* Create a workspace to build the docker images
-	* `git clone https://github.com/INAETICS/node-provisioning-service.git && cd node-provisioning-service && docker build -t 172.17.8.2:5000/inaetics/provisioning .`
-	* `git clone https://github.com/INAETICS/node-agent-service.git && cd node-agent-service && docker build -t 172.17.8.2:5000/inaetics/felix-agent .`
-	* `git clone https://github.com/INAETICS/celix-node-agent-service.git && cd celix-node-agent-service && docker build -t 172.17.8.2:5000/inaetics/celix-agent .`
-	* `docker push 172.17.8.2:5000/inaetics/provisioning`
-	* `docker push 172.17.8.2:5000/inaetics/felix-agent`
-	* `docker push 172.17.8.2:5000/inaetics/celix-agent`
-* Run `cd workers && vagrant up`
-* Wait until are workers are started (default 10). 
+	* Build, tag, and push the docker images
+		* Run `sh bin/docker_build.sh docker-images/provisioning 172.17.8.2:5000 inaetics/provisioning`
+		* Run `sh bin/docker_build.sh docker-images/felix-agent 172.17.8.2:5000 inaetics/felix-agent`
+		* Run `sh bin/docker_build.sh docker-images/celix-agent 172.17.8.2:5000 inaetics/celix-agent`
+* Run `cd workers && vagrant up && cd -`
+* Wait until are workers are started (default 5). 
 * Run `cd workers && vagrant ssh worker-1`
 * Run `inaetics_fleet_manager --start`
 
@@ -39,19 +39,26 @@ The demonstrator can up scale up by running the following command :
 * The web ui should some some additional stastictics.
 
 ##Restarting the cluster
-TODO
+You can restart the cluster by running from the project directory :
+* Restart bootstrap: `cd bootstrap && vagrant halt && vagrant up && cd -`
+* Stop workers: `cd workers && vagrant halt && cd -`
+* Clear cluster discovery: `sh bin/purge_etcd_discovery.sh http://172.17.8.2:4001 inaetics-cluster-1
+* Start workers: `cd workers && vagrant up && cd-`
+
 
 ##Update the docker images 
 The docker images (provision,celix-agent & felix-agent) used for INAETICS can be updated by building a new docker images with a correct tag and pushing this tag. e.g to update a provisioning image you can do:
 
-* Git clone or cd to the node-provisioning-service project.
+* Git clone the project which needs to be updated (node-provisioning-service, node-agent-service, celix-node-agent-service`.
 * Make the wanted changes (e.g checkout a different branch)
 * Build the docker images with a tag using the ip address & port of the docker registry service and name of the images
-	* (For provisioning) `docker build -t 172.17.8.2:5000/inaetics/provisioning .`
+	* (For node-provisioning-service) `docker build -t 172.17.8.2:5000/inaetics/provisioning .`
+	* (For node-agent-service) `docker build -t 172.17.8.2:5000/inaetics/felix-agent .`
+	* (For celix-node-agent-service) `docker build -t 172.17.8.2:5000/inaetics/celix-agent .`
 * Push the image 
-	* (For Provisioning) `docker push 172.17.8.2:5000/inaetics/provisioning` 
-
-TODO use script
+	* (For node-provisioning-service) `docker push 172.17.8.2:5000/inaetics/provisioning` 
+	* (For node-agent-service) `docker push 172.17.8.2:5000/inaetics/felix-agent` 
+	* (For celix-node-agent-service) `docker push 172.17.8.2:5000/inaetics/celix-agent` 
 
 ##Vagrant host types
 ###Bootstrap 
