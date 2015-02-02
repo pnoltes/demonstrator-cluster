@@ -44,11 +44,17 @@ ETCDCTL_PEERS=${MY_IP}:${ETCD_CLIENT_PORT}
 
 if [ ${COMMAND} = "start" ] 
 then
+	#/usr/bin/docker rm -f "celix-${INSTANCE_ID}" 2> /dev/null 
+ 	PREV_IMG=$(sudo docker ps -a | grep celix-${INSTANCE_ID})
+	if [ -n ${PREV_IMG} ] 
+	then
+		/usr/bin/docker rm -f celix-${INSTANCE_ID}
+	fi
 	/usr/bin/docker pull ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest
 	/usr/bin/docker run --rm=true --hostname="celix-${HOSTNAME}" --name="celix-${INSTANCE_ID}" -p 6668:6666 -p 9999:9999 -p 8888:8888 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/celix-agent:latest /tmp/start_agent.sh celix_${INSTANCE_ID} $MY_IP
 else
-	/usr/bin/docker stop "celix-${HOSTNAME}"
-	/usr/bin/docker rm "celix-${HOSTNAME}" 2> /dev/null 
+	/usr/bin/docker stop "celix-${INSTANCE_ID}"
+	/usr/bin/docker rm -f "celix-${INSTANCE_ID}" 2> /dev/null 
 	echo ""
 fi
 
