@@ -54,10 +54,6 @@ function parse_args {
 		exit 1
 	fi
 
-	export $HOSTNAME
-	export $MACHINE_ID
-	export $INSTANCE_ID
-	export $COMMAND
 }
 
 
