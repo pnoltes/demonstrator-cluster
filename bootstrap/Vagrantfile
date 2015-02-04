@@ -34,9 +34,12 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.synced_folder "docker-registry-service", "/var/lib/docker-registry-service"
+    config.vm.synced_folder "../docker-images", "/home/core/docker-images"
 
     #Provision userdata with shell
     config.vm.provision :file, :source => "coreos-userdata", :destination => "/tmp/vagrantfile-user-data"
     config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
+    config.vm.provision :file, :source => "bin/docker_build.sh", :destination => "/home/core/docker_build.sh"
+    config.vm.provision :shell, :inline => "chmod +x /home/core/docker_build.sh", :privileged => true
   end
 end
