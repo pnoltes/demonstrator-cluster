@@ -7,6 +7,8 @@ write_files:
         Environment=DOCKER_OPTS='--insecure-registry="172.17.8.0/24"'
 
 coreos:
+  update:
+    reboot-strategy: off
   etcd:
     name: worker-$public_ipv4
     discovery: http://172.17.8.2:4001/v2/keys/_etcd/registry/inaetics-cluster-1

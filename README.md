@@ -10,16 +10,13 @@ This repository containts an INAETICS cluster environment based on fleet preconf
 	* Run `git submodule init`
 	* Run `git submodule update`
 * Run `cd bootstrap && vagrant up`
-* Wait until the boottrap environment is started and the webpage at `http://172.17.8.2:5000/v1/search` will load
+* Wait until the bootstrap environment is started and the webpage at `http://172.17.8.2:5000/v1/search` will load
 * Build and push docker images to the docker repository registry:
-	* Configure docker for a insecure/private registry:
-		* For Fedora: add `--insecure-registry 172.17.8.0/24` to `/etc/sysconfig/docker` 
-	* If needed start docker, generally:
-		* For Fedora: `systemctl start docker.service`
-	* Build, tag, and push the docker images:
-		* Run `sh bin/docker_build.sh docker-images/provisioning 172.17.8.2:5000 inaetics/provisioning`
-		* Run `sh bin/docker_build.sh docker-images/felix-agent 172.17.8.2:5000 inaetics/felix-agent`
-		* Run `sh bin/docker_build.sh docker-images/celix-agent 172.17.8.2:5000 inaetics/celix-agent`
+    * ssh into the bootstrap VM with `vagrant ssh`
+    * Run `sh docker_build.sh docker-images/provisioning localhost:5000 inaetics/provisioning`
+    * Run `sh docker_build.sh docker-images/felix-agent localhost:5000 inaetics/felix-agent`
+    * Run `sh docker_build.sh docker-images/celix-agent localhost:5000 inaetics/celix-agent`
+    * exit the VM and cd back to project root directory
 * Run `cd workers && vagrant up && cd -`;
 * Wait until are workers are started (default 5);
 * Run `cd workers && vagrant ssh worker-1`;
@@ -85,3 +82,13 @@ The workers are the machines (is this virtual) that join the cluster. Every work
 * The Docker-registry service is still external, this can be moved to the cluster workers;
 * On Fedora the disabling the dynamic firewall (` sudo systemctl stop firewalld.service`) is needed to be able to push and download docker images.
 
+## Debug options
+
+In case of problems one of the following options can be used to get additional info
+1. check vagrant:			vagrant status shows if the vagrant machines are correctly running
+2. enter vagrant machine:		vagrant ssh <name>, e.g. vagrant ssh worker-1
+3. check docker registry:               http://172.17.8.2:5000/v1/search
+4. check fleet unit jobs:               enter bootstrap machine with vagrant ssh cluster-bootstrap, then inaetics_fleet_manager --status
+5. check services running:              journalctl -u <service name>:	e.g. journalctl -u docker-registry.service
+6. check logging of agents:             docker ps, get container id, then docker logs <container_id>
+7. enter docker container:		docker ps, note the container ids. sh /home/core/docker_enter.sh <container_id>
