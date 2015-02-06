@@ -43,6 +43,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, :inline => "chmod +x /home/core/docker_build.sh", :privileged => true
     config.vm.provision :file, :source => "bin/docker_enter.sh", :destination => "/home/core/docker_enter.sh"
     config.vm.provision :shell, :inline => "chmod +x /home/core/docker_enter.sh", :privileged => true
-    config.vm.provision :shell, :inline => "mkdir /var/lib/docker-registry-service/data"
+    config.vm.provision :shell, :inline => "mkdir /home/core/data"
   end
 end
