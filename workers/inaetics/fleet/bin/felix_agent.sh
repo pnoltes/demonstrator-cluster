@@ -3,7 +3,7 @@
 source /opt/inaetics/fleet/bin/common.sh
 parse_args $*
 
-MY_IP=$(ifconfig ${SUBNET_INTERFACE} | grep inet\ | awk '{print $2}')
+MY_IP=$(ifconfig | grep ${SUBNET_INTERFACE} | grep inet\ | awk '{print $2}')
 #DOCKER_IP=$(ifconfig docker0 | grep inet\  | awk '{print $2}')
 
 ETCDCTL_PEERS=${MY_IP}:${ETCD_CLIENT_PORT}
