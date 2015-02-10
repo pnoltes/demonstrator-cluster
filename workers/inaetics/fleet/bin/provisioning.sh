@@ -13,7 +13,7 @@ if [ ${COMMAND} = "start" ]
 then	
 	remove_docker_image "ace-${HOSTNAME}"
 	/usr/bin/docker pull ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/provisioning:latest
-	/usr/bin/docker run --rm=true --hostname="ace-${HOSTNAME}" --name="ace-${HOSTNAME}" -p 8080:8080 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/provisioning:latest /tmp/node-provisioning.sh node-provisioning-${MY_IP} ${MY_IP}
+	/usr/bin/docker run --rm=true --hostname="ace-${HOSTNAME}" --name="ace-${HOSTNAME}" -p 8080:8080 -p 2019:2019 -e ETCDCTL_PEERS=${ETCDCTL_PEERS} ${DOCKER_REPOSITORY_HOST}:${DOCKER_REPOSITORY_PORT}/inaetics/provisioning:latest /tmp/node-provisioning.sh node-provisioning-${MY_IP} ${MY_IP}
 else 
 	/usr/bin/docker stop "ace-${HOSTNAME}"
 	remove_docker_image "ace-${HOSTNAME}"
