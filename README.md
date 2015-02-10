@@ -87,13 +87,13 @@ The workers are the machines (is this virtual) that join the cluster. Every work
 In case of problems one of the following options can be used to get additional info
 
 1. check vagrant:             vagrant status shows if the vagrant machines are correctly running
-2. enter vagrant machine:     vagrant ssh <name>, e.g. vagrant ssh worker-1
+2. enter vagrant machine:     vagrant ssh &lt;name&gt;, e.g. vagrant ssh worker-1
 3. check docker registry:     http://172.17.8.2:5000/v1/search
 4. check fleet unit jobs:     enter worker-1  machine with vagrant ssh worker-1, then inaetics_fleet_manager --status
     or low level: vagrant ssh worker-1: etcdctl ls /_coreos.com --recursive
-5. check services running:    journalctl -u <service name>:	e.g. journalctl -u docker-registry.service
-6. check logging of agents:   docker ps, get container id, then docker logs <container_id>
-7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh <container_id>
+5. check services running:    journalctl -u &lt;service name&gt;:	e.g. journalctl -u docker-registry.service
+6. check logging of agents:   docker ps, get container id, then docker logs &lt;container_id&gt;
+7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh &lt;container_id&gt;
 8. debugging etcd:            vagrant ssh worker-1:
         a. Request:  curl -l http://172.17.8.101:4001/v2/leader
            Response: http://172.17.8.102:7001
@@ -103,4 +103,6 @@ In case of problems one of the following options can be used to get additional i
            Response: shows etcd transport statistics
         d. Request:  curl -l http://172.17.8.102:7001/v2/admin/config (check port number!)
            Response: number of nodes participating in leader election
+9. debugging ACE:             use telnet to get into the Gogo shell: telnet &lt;ACE_ip&gt; 2019
+10. remote debugging felix agents: remote debugging is enabled on port 8000.
  
