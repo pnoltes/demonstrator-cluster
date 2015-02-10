@@ -90,6 +90,17 @@ In case of problems one of the following options can be used to get additional i
 2. enter vagrant machine:     vagrant ssh <name>, e.g. vagrant ssh worker-1
 3. check docker registry:     http://172.17.8.2:5000/v1/search
 4. check fleet unit jobs:     enter worker-1  machine with vagrant ssh worker-1, then inaetics_fleet_manager --status
+    or low level: vagrant ssh worker-1: etcdctl ls /_coreos.com --recursive
 5. check services running:    journalctl -u <service name>:	e.g. journalctl -u docker-registry.service
 6. check logging of agents:   docker ps, get container id, then docker logs <container_id>
 7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh <container_id>
+8. debugging etcd:            vagrant ssh worker-1:
+        a. Request:  curl -l http://172.17.8.101:4001/v2/leader
+           Response: http://172.17.8.102:7001
+        b. Request:  curl -l http://172.17.8.102:4001/v2/stats/leader
+           Response: shows leader election statistics
+        c. Request:  curl -l http://172.17.8.101:4002/v2/stats/self (on every worker)
+           Response: shows etcd transport statistics
+        d. Request:  curl -l http://172.17.8.102:7001/v2/admin/config (check port number!)
+           Response: number of nodes participating in leader election
+ 
