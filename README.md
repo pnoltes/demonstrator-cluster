@@ -85,10 +85,11 @@ The workers are the machines (is this virtual) that join the cluster. Every work
 ## Debug options
 
 In case of problems one of the following options can be used to get additional info
-1. check vagrant:			vagrant status shows if the vagrant machines are correctly running
-2. enter vagrant machine:		vagrant ssh <name>, e.g. vagrant ssh worker-1
-3. check docker registry:               http://172.17.8.2:5000/v1/search
-4. check fleet unit jobs:               enter bootstrap machine with vagrant ssh cluster-bootstrap, then inaetics_fleet_manager --status
-5. check services running:              journalctl -u <service name>:	e.g. journalctl -u docker-registry.service
-6. check logging of agents:             docker ps, get container id, then docker logs <container_id>
-7. enter docker container:		docker ps, note the container ids. sh /home/core/docker_enter.sh <container_id>
+
+1. check vagrant:             vagrant status shows if the vagrant machines are correctly running
+2. enter vagrant machine:     vagrant ssh <name>, e.g. vagrant ssh worker-1
+3. check docker registry:     http://172.17.8.2:5000/v1/search
+4. check fleet unit jobs:     enter worker-1  machine with vagrant ssh worker-1, then inaetics_fleet_manager --status
+5. check services running:    journalctl -u <service name>:	e.g. journalctl -u docker-registry.service
+6. check logging of agents:   docker ps, get container id, then docker logs <container_id>
+7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh <container_id>
