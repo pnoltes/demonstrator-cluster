@@ -105,6 +105,7 @@ In case of problems one of the following options can be used to get additional i
            Response: number of nodes participating in leader election
 9. debugging ACE:             use telnet to get into the Gogo shell: telnet &lt;ACE_ip&gt; 2019
 10. debugging felix agents:
+    - use the felix webconsole on http://&lt;felix_ip&gt;:8080/system/console/ (credentials: admin / admin)
     - use telnet to get into the Gogo shell: telnet &lt;felix_ip&gt; 2019
     - java remote debugging is enabled on port 8000.
  
