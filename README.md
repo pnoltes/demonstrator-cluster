@@ -95,14 +95,16 @@ In case of problems one of the following options can be used to get additional i
 6. check logging of agents:   docker ps, get container id, then docker logs &lt;container_id&gt;
 7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh &lt;container_id&gt;
 8. debugging etcd:            vagrant ssh worker-1:
-        a. Request:  curl -l http://172.17.8.101:4001/v2/leader
+    - Request:  curl -l http://172.17.8.101:4001/v2/leader
            Response: http://172.17.8.102:7001
-        b. Request:  curl -l http://172.17.8.102:4001/v2/stats/leader
+    - Request:  curl -l http://172.17.8.102:4001/v2/stats/leader
            Response: shows leader election statistics
-        c. Request:  curl -l http://172.17.8.101:4002/v2/stats/self (on every worker)
+    - Request:  curl -l http://172.17.8.101:4002/v2/stats/self (on every worker)
            Response: shows etcd transport statistics
-        d. Request:  curl -l http://172.17.8.102:7001/v2/admin/config (check port number!)
+    - Request:  curl -l http://172.17.8.102:7001/v2/admin/config (check port number!)
            Response: number of nodes participating in leader election
 9. debugging ACE:             use telnet to get into the Gogo shell: telnet &lt;ACE_ip&gt; 2019
-10. remote debugging felix agents: remote debugging is enabled on port 8000.
+10. debugging felix agents:
+    - use telnet to get into the Gogo shell: telnet &lt;felix_ip&gt; 2019
+    - java remote debugging is enabled on port 8000.
  
