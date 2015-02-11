@@ -44,10 +44,32 @@ function stop_inaetics(){
 
 }
 
+function startStopUnits(){
+
+  local UNIT_FILE_NAME_PREFIX="$1"
+  local AGENTS_NUMBER="$2"
+
+  local CURRENT_NR_UNITS=$(fleetctl list-units -no-legend | grep $UNIT_FILE_NAME_PREFIX | wc -l)
+
+  #Stop agents
+  for (( INDEX=CURRENT_NR_UNITS; INDEX>$AGENTS_NUMBER; INDEX-- ))
+  do
+    fleetctl stop --no-block "$UNIT_FILE_NAME_PREFIX$INDEX$UNIT_FILE_NAME_SUFFIX"
+    fleetctl unload --block-attempts=0 --no-block "$UNIT_FILE_NAME_PREFIX$INDEX$UNIT_FILE_NAME_SUFFIX"
+  done
+
+  #Start agents
+  for (( INDEX=1; INDEX<=$AGENTS_NUMBER; INDEX++ ))
+  do
+    fleetctl start --no-block "$UNIT_FILE_NAME_PREFIX$INDEX$UNIT_FILE_NAME_SUFFIX"
+    sleep 2
+  done
+
+}
 
 function start_inaetics(){
 
-	echo "Inaetics Environment starting with $CELIX_AGENTS_NUMBER Celix agents and $FELIX_AGENTS_NUMBER Felix agents"
+  echo "Inaetics Environment starting with $CELIX_AGENTS_NUMBER Celix agents and $FELIX_AGENTS_NUMBER Felix agents"
 
   #Submit unit files
   fleetctl submit "$UNIT_FILES_PATH/$PROVISIONING_UNIT_FILE_NAME_PREFIX$UNIT_FILE_NAME_SUFFIX"
@@ -58,21 +80,8 @@ function start_inaetics(){
   fleetctl start -no-block "$PROVISIONING_UNIT_FILE_NAME_PREFIX$UNIT_FILE_NAME_SUFFIX"
   sleep 2
 
-  #Start Felix agents (Felix before Celix because they have more conflicts)"
-  for (( INDEX=1; INDEX<=$FELIX_AGENTS_NUMBER; INDEX++ ))
-  do
-    fleetctl start -no-block "$FELIX_UNIT_FILE_NAME_PREFIX$INDEX$UNIT_FILE_NAME_SUFFIX"
-    sleep 2
-  done
-
-  #Start Celix agents
-  for (( INDEX=1; INDEX<=$CELIX_AGENTS_NUMBER; INDEX++ ))
-  do
-    fleetctl start -no-block "$CELIX_UNIT_FILE_NAME_PREFIX$INDEX$UNIT_FILE_NAME_SUFFIX"
-    sleep 2
-  done
-  
-
+  startStopUnits $FELIX_UNIT_FILE_NAME_PREFIX $FELIX_AGENTS_NUMBER
+  startStopUnits $CELIX_UNIT_FILE_NAME_PREFIX $CELIX_AGENTS_NUMBER
 
 }
 
