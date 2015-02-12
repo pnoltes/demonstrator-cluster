@@ -5,6 +5,11 @@ write_files:
     content: |
         [Service]
         Environment=DOCKER_OPTS='--insecure-registry="172.17.8.0/24"'
+  - path: /etc/systemd/system/etcd.service.d/10-snapshot.conf
+    content: |
+        [Service]
+        Environment=ETCD_SNAPSHOTCOUNT=50
+        Environment=ETCD_SNAPSHOT=false 
 
 coreos:
   update:
