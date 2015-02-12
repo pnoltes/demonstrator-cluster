@@ -124,6 +124,26 @@ for ITEM in $*; do
     --start)
       READY_TO_START=1
     ;;
+    --start0)
+      READY_TO_START=1
+      CELIX_AGENTS_NUMBER=0
+      FELIX_AGENTS_NUMBER=0
+    ;;
+    --start1)
+      READY_TO_START=1
+      CELIX_AGENTS_NUMBER=0
+      FELIX_AGENTS_NUMBER=1
+    ;;
+    --start4)
+      READY_TO_START=1
+      CELIX_AGENTS_NUMBER=2
+      FELIX_AGENTS_NUMBER=2
+    ;;
+    --start8)
+      READY_TO_START=1
+      CELIX_AGENTS_NUMBER=4
+      FELIX_AGENTS_NUMBER=4
+    ;;
     --celixAgents=*)
       CELIX_AGENTS_NUMBER=`echo ${ITEM} | cut -d"=" -f2`
     ;;
