@@ -3,7 +3,7 @@
 	url = https://github.com/INAETICS/node-provisioning-service.git
 [submodule "docker-images/felix-agent"]
 	path = docker-images/felix-agent
-	url = https://github.com/INAETICS/node-agent-service.git
+	url = https://github.com/INAETICS/node-agent-java.git
 [submodule "docker-images/celix-agent"]
 	path = docker-images/celix-agent
-	url = https://github.com/INAETICS/celix-node-agent-service.git
+	url = https://github.com/INAETICS/node-agent-c.git
