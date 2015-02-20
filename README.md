@@ -1,111 +1,89 @@
-# INAETICS cluster
+# INAETICS demonstrator cluster
 
-This repository containts an INAETICS cluster environment based on fleet preconfigured for vagrant (virtualbox)
+This repository containts the INAETICS demonstrator environment based on CoreOS preconfigured for Vagrant and VirtualBox.
 
-## Run the cluster in Vagrant
+## Run the demonstrator in Vagrant
 
-* Install Git, Docker, VirtualBox & Vagrant;
+* Install Git, VirtualBox & Vagrant;
 * Clone this repository;
-* Update docker image submodules:
-	* Run `git submodule init`
-	* Run `git submodule update`
-* Run `cd bootstrap && vagrant up`
-* Wait until the bootstrap environment is started and the webpage at `http://172.17.8.2:5000/v1/search` will load
+* Make sure the sub modules are initialized and updated:
+    * run `git submodule init`;
+    * run `git submodule update`;
+* Start the bootstrap VM:
+    * go to the `bootstrap` directory;
+    * run `vagrant up`;
+* Wait until the bootstrap VM is started and the URL `http://172.17.8.2:5000/v1/search` returns a valid JSON result;
 * Build and push docker images to the docker repository registry:
-    * ssh into the bootstrap VM with `vagrant ssh`
-    * Run `sh docker_build.sh docker-images/provisioning localhost:5000 inaetics/provisioning`
-    * Run `sh docker_build.sh docker-images/felix-agent localhost:5000 inaetics/felix-agent`
-    * Run `sh docker_build.sh docker-images/celix-agent localhost:5000 inaetics/celix-agent`
-    * exit the VM and cd back to project root directory
-* Run `cd workers && vagrant up && cd -`;
-* Wait until are workers are started (default 5);
-* Run `cd workers && vagrant ssh worker-1`;
-* Run `inaetics_fleet_manager --start`.
+    * SSH into the bootstrap VM with `vagrant ssh`
+    * run `sh docker_build.sh docker-images/provisioning localhost:5000 inaetics/provisioning`
+    * run `sh docker_build.sh docker-images/felix-agent localhost:5000 inaetics/felix-agent`
+    * run `sh docker_build.sh docker-images/celix-agent localhost:5000 inaetics/celix-agent`
+    * exit the VM and go back to project root directory;
+* Start the 5 compute resources (workers):
+    * go to the `workers` directory;
+    * run `vagrant up`;
+* Wait until are workers are started;
+* Start the INAETICS demonstrator application:
+    * run `vagrant ssh worker-1`;
+    * run `inaetics_fleet_manager --start`.
 
 ## Starting and reconfiguring the demonstrator
 
-The demonstrator will start automatically after running `inaetics_fleet_manager --start` in previous chapter. 
-After that you need to manually find which host is running the web ui:
+The demonstrator application will start automatically after running `inaetics_fleet_manager --start` in previous
+section. After this, you need to determine what host is running the web UI:
 
-* Login into a worker host by running `vagrant ssh worker-1` in the workers directory;
-* Run `inaetics_fleet_manager --status` to see what is running and where everything is running;
-* Find the IP address used for the `felix@1.service` and browse to `http://${ip_address}:8080`;
-* The web UI should show some statistics about the demo processing running.
+* In the first worker VM (*worker-1*):
+    * run `inaetics_fleet_manager --status` to see what and where everything is running;
+    * find the IPv4 address of the node that runs the `felix@1.service`;
+    * point your web browser to `http://${ip_address}:8080/`.
+* The web UI should show a single page with the statistics of the various parts of the INAETICS demonstrator
+  application.
 
-The demonstrator can up scale up by running the following command:
+You can scale-out the demonstrator application by running:
 
-* Run `inaetics_fleet_manager --start --celixAgents=4 --felixAgents=4`;
-* Check the result on the machine running the `felix@1.service`;
-* The web ui should some some additional statistics.
+* Run `inaetics_fleet_manager --start --celixAgents=3 --felixAgents=3`;
+* After a little while, the web UI should display two additional graphs with statistics.
 
-## Restarting the cluster
+## Running more or fewer workers
 
-You can restart the cluster by running from the project directory:
+By default, the cluster is configured for five(5) compute resources, or workers. To run more or fewer workers, edit the
+`workers/Vagrantfile` file, and change the value of the `$num_instances` variable to, for example, `$num_instances=3`.
+After saving this change, you need to run `vagrant up` from the `workers` directory.
 
-* Restart bootstrap: `cd bootstrap && vagrant halt && vagrant up && cd -`;
-* Stop workers: `cd workers && vagrant halt && cd -`;
-* Clear cluster discovery: `sh bin/purge_etcd_discovery.sh http://172.17.8.2:4001 inaetics-cluster-1`;
-* Start workers: `cd workers && vagrant up && cd-`.
+## Known issues
 
-## Update the docker images 
-
-The docker images (*provision*, *celix-agent* and *felix-agent*) used for INAETICS can be updated by building a new docker images with a correct tag and pushing this tag. e.g to update a provisioning image you can do:
-
-* Git clone the project which needs to be updated (node-provisioning-service, node-agent-service, celix-node-agent-service;
-* Make the wanted changes (e.g checkout a different branch);
-* Build the docker images with a tag using the ip address & port of the docker registry service and name of the images:
-	* for node-provisioning-service: `docker build -t 172.17.8.2:5000/inaetics/provisioning .`;
-	* for node-agent-service: `docker build -t 172.17.8.2:5000/inaetics/felix-agent .`;
-	* for celix-node-agent-service: `docker build -t 172.17.8.2:5000/inaetics/celix-agent .`.
-* Push the image:
-	* for node-provisioning-service: `docker push 172.17.8.2:5000/inaetics/provisioning`;
-	* for node-agent-service: `docker push 172.17.8.2:5000/inaetics/felix-agent`;
-	* for celix-node-agent-service: `docker push 172.17.8.2:5000/inaetics/celix-agent`.
-
-## Vagrant host types
-
-### Bootstrap 
-
-The bootstrap host realizes two things:
-
-1. Run an Etcd for cluster discovery. This Etcd instance is not directly part of the cluster, but is used to register and discover peers which are part of the cluster;
-2. run a Docker-registry service. For this demonstration, a Docker-registry service is running outside the cluster and is used to pull the images needed for the cluster (provisioning, celix agent, felix agent).
-
-### Workers 
-
-By default, the cluster is configured for 5 "worker" hosts. This can be changed by editing the `workers/Vagrantfile` file, and changing the value of the `num_instances` key, for example, `num_instances=3`.   
-The workers are the machines (is this virtual) that join the cluster. Every worker uses Docker to run images doing the actual work. 
-
-## Known shortcomming
-
-* The cluster still needs a external Etcd to be able to bootstrap the cluster;
-* The Docker-registry service is still external, this can be moved to the cluster workers;
-* On Fedora the disabling the dynamic firewall (` sudo systemctl stop firewalld.service`) is needed to be able to push and download docker images.
+* Scaling up and down in the demonstrator application takes a long time;
+* The compute resources cannot be restarted directly without purging some state information:
+    * go to the project root directory;
+    * run `sh bin/purge_etcd_discovery.sh http://172.17.8.2:4001 inaetics-cluster-1`.
 
 ## Debug options
 
 In case of problems one of the following options can be used to get additional info
 
-1. check vagrant:             vagrant status shows if the vagrant machines are correctly running
-2. enter vagrant machine:     vagrant ssh &lt;name&gt;, e.g. vagrant ssh worker-1
-3. check docker registry:     http://172.17.8.2:5000/v1/search
-4. check fleet unit jobs:     enter worker-1  machine with vagrant ssh worker-1, then inaetics_fleet_manager --status
-    or low level: vagrant ssh worker-1: etcdctl ls /_coreos.com --recursive
-5. check services running:    journalctl -u &lt;service name&gt;:	e.g. journalctl -u docker-registry.service
-6. check logging of agents:   docker ps, get container id, then docker logs &lt;container_id&gt;
-7. enter docker container:    docker ps, note the container ids. sh /home/core/docker_enter.sh &lt;container_id&gt;
-8. debugging etcd:            vagrant ssh worker-1:
-    - Request:  curl -l http://172.17.8.101:4001/v2/leader
-           Response: http://172.17.8.102:7001
-    - Request:  curl -l http://172.17.8.102:4001/v2/stats/leader
-           Response: shows leader election statistics
-    - Request:  curl -l http://172.17.8.101:4002/v2/stats/self (on every worker)
-           Response: shows etcd transport statistics
-    - Request:  curl -l http://172.17.8.102:7001/v2/admin/config (check port number!)
-           Response: number of nodes participating in leader election
-9. debugging ACE:             use telnet to get into the Gogo shell: telnet &lt;ACE_ip&gt; 2019
-10. debugging felix agents:
-    - use the felix webconsole on http://&lt;felix_ip&gt;:8080/system/console/ (credentials: admin / admin)
-    - use telnet to get into the Gogo shell: telnet &lt;felix_ip&gt; 2019
-    - java remote debugging is enabled on port 8000.
+1. check Vagrant: `vagrant status` shows if the Vagrant machines are correctly running;
+2. enter Vagrant machine: `vagrant ssh <name>`, where &lt;name&gt; is the name of the Vagrant machine, for example
+   `vagrant ssh worker-1`;
+3. check docker registry: `curl http://172.17.8.2:5000/v1/search` should output a valid JSON string;
+4. check fleet unit jobs: from the first worker machine (`vagrant ssh worker-1`) use `inaetics_fleet_manager --status`
+   or `fleetctl list-units` and `fleetctl list-unit-files`. Use `etcdctl ls /_coreos.com/fleet --recursive` to see what
+   is stored in Etcd by Fleet;
+5. check services running: `journalctl -u <service name>`, where &lt;service name&gt; is the name of the unit you want
+   to check on. For example: `journalctl -u docker-registry.service` will output the logs of the Docker registry;
+6. check logging of agents: `docker ps`, get the container ID (first column), then run `docker logs <container_id>`;
+7. enter docker container: `docker ps`, get the container ID (first column), then run `sh /home/core/docker_enter.sh
+   <container_id>`;
+8. debugging etcd: from the first worker machine (`vagrant ssh worker-1`):
+    - `curl -l http://172.17.8.101:4001/v2/leader` should return the current leader: `http://172.17.8.102:7001`;
+    - `curl -l http://172.17.8.102:4001/v2/stats/leader` shows the leader election statistics;
+    - `curl -l http://172.17.8.101:4002/v2/stats/self` (on every worker) shows etcd transport statistics
+    - `curl -l http://172.17.8.102:7001/v2/admin/config` (check port number!) shows the number of nodes participating in
+      leader election.
+9. debugging provisioning server: use telnet to get into the Gogo shell: `telnet <IP address of provisioning service>
+   2019`;
+10. debugging the Felix agents:
+    - use the Felix webconsole on `http://<IP address of Felix agent>:8080/system/console/` and enter the credentials:
+      `admin`/`admin`;
+    - use telnet to get into the Gogo shell: `telnet <IP address of Felix agent> 2019`;
+    - attach your Java debugger to port 8000 of the Felix agent.
  
