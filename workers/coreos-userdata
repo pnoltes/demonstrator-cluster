@@ -1,10 +1,11 @@
 #cloud-config
 
 write_files:
-  - path: /etc/systemd/system/docker.service.d/50-insecure-registry.conf
+  - path: /etc/systemd/system/docker.service.d/50-additional_docker_options.conf
     content: |
         [Service]
         Environment=DOCKER_OPTS='--insecure-registry="172.17.8.0/24"'
+        Environment=DOCKER_OPT_BIP="--bip=172.17.42.1/24"
   - path: /etc/systemd/system/etcd.service.d/10-snapshot.conf
     content: |
         [Service]

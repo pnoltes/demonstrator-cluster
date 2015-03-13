@@ -1,5 +1,11 @@
 #cloud-config
 
+write_files:
+  - path: /etc/systemd/system/docker.service.d/50-additional_docker_options.conf
+    content: |
+        [Service]
+        Environment=DOCKER_OPT_BIP="--bip=172.17.42.1/24"
+
 coreos:
   update:
     reboot-strategy: off
