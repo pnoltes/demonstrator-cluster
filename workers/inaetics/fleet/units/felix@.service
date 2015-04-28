@@ -11,4 +11,3 @@ RestartSec=10
 
 [X-Fleet]
 Conflicts=felix@*.service
-Conflicts=provisioning.service
