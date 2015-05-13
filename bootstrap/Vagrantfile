@@ -33,8 +33,8 @@ Vagrant.configure("2") do |config|
       virtualbox.cpus = $virtualbox_cpus
     end
 
-    config.vm.synced_folder "docker-registry-service", "/var/lib/docker-registry-service"
-    config.vm.synced_folder "../docker-images", "/home/core/docker-images"
+    config.vm.synced_folder "docker-registry-service", "/var/lib/docker-registry-service", type: "rsync"
+    config.vm.synced_folder "../docker-images", "/home/core/docker-images", type: "rsync"
 
     #Provision userdata with shell
     config.vm.provision :file, :source => "coreos-userdata", :destination => "/tmp/vagrantfile-user-data"
