@@ -4,6 +4,8 @@ This repository containts the INAETICS demonstrator environment based on CoreOS 
 
 ## Run the demonstrator in Vagrant
 
+See also the `user_guide.pdf` for more detailed instructions and information on running this demonstrator on your own machine.
+
 * Install Git, VirtualBox & Vagrant;
 * Clone this repository;
 * Make sure the sub modules are initialized and updated:
