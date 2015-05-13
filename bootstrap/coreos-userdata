@@ -34,6 +34,22 @@ coreos:
 
         [Install]
         WantedBy=sockets.target
+        
+    - name: init-etcd-discovery.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Initialize Etcd Discovery
+        After=etcd.service
+        Requires=etcd.service
+        
+        [Service]
+        ExecStart=/bin/curl -X PUT http://localhost:4001/v2/keys/_etcd/registry/inaetics-cluster-1/_config/size -d value=5
+        
+        [Install]
+        WantedBy=multi-user.target
+                
     - name: docker-registry.service
       command: start
       runtime: no
@@ -53,6 +69,7 @@ coreos:
 
         [Install]
         WantedBy=multi-user.target
+        
 #    - name: docker-registry-announce.service
 #      command: start
 #      runtime: no
