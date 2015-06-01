@@ -2,8 +2,7 @@
 
 #IP
 SUBNET_INTERFACE=172.17.8
-MY_IP=$(ifconfig | grep ${SUBNET_INTERFACE} | grep inet\ | awk '{print $2}')
-
+MY_IP=$(ip -o -4 addr show | awk -F '[ /]+' '/global/ {print $4}' | grep ${SUBNET_INTERFACE})
 
 #ETCD
 ETCD_CLIENT_PORT=4001
