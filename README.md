@@ -24,7 +24,7 @@ See also the `user_guide.pdf` for more detailed instructions and information on 
 * Start the 5 compute resources (workers):
     * go to the `workers` directory;
     * run `vagrant up`;
-* Wait until are workers are started;
+* Wait until all workers are started;
 * Start the INAETICS demonstrator application:
     * run `vagrant ssh worker-1`;
     * run `inaetics_fleet_manager --start`.
@@ -57,7 +57,7 @@ After saving this change, you need to run `vagrant up` from the `workers` direct
 * Scaling up and down in the demonstrator application takes a long time;
 * The compute resources cannot be restarted directly without purging some state information:
     * go to the project root directory;
-    * run `sh bin/purge_etcd_discovery.sh http://172.17.8.2:4001 inaetics-cluster-1`.
+    * run `sh bin/purge_etcd_discovery.sh inaetics-cluster-1 http://172.17.8.2:4001/v2/keys/_etcd/registry`.
 
 ## Debug options
 
