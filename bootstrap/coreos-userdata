@@ -20,6 +20,14 @@ coreos:
       command: start 
 #    - name: fleet.service
 #      command: start
+    - name: 00-eth1.network
+      runtime: true
+      content: |
+      [Match]
+      Name=eth1
+
+      [Network]
+      Address:172.17.8.2/24
     - name: docker-tcp.socket
       command: start
       enable: true
