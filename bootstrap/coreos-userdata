@@ -9,14 +9,18 @@ write_files:
 coreos:
   update:
     reboot-strategy: off
-  etcd:
+  etcd2:
       name: bootstrap
-      addr: $public_ipv4:4001
-      peer-addr: $public_ipv4:7001 
+      listen-client-urls: http://0.0.0.0:4001
+      listen-peer-urls: http://0.0.0.0:7001
+      advertise-client-urls: http://$public_ipv4:4001
+      initial-advertise-peer-urls: http://$public_ipv4:7001
+      initial-cluster-state: new
+      initial-cluster: bootstrap=http://$public_ipv4:7001 
 #  fleet:
 #      public-ip: $public_ipv4
   units:
-    - name: etcd.service
+    - name: etcd2.service
       command: start 
 #    - name: fleet.service
 #      command: start
@@ -41,11 +45,11 @@ coreos:
       content: |
         [Unit]
         Description=Initialize Etcd Discovery
-        After=etcd.service
-        Requires=etcd.service
+        After=etcd2.service
+        Requires=etcd2.service
         
         [Service]
-        ExecStart=/bin/curl -X PUT http://localhost:4001/v2/keys/_etcd/registry/inaetics-cluster-1/_config/size -d value=5
+        ExecStart=/bin/bash -c "until /bin/curl -X PUT http://localhost:4001/v2/keys/_etcd/registry/inaetics-cluster-1/_config/size -d value=5 ; do /bin/sleep 5 ; done" 
         
         [Install]
         WantedBy=multi-user.target

@@ -7,9 +7,9 @@ Vagrant.require_version ">= 1.6.0"
 $instance_name="cluster-bootstrap"
 $instance_ip="172.17.8.2"
 
-$coreos_channel="alpha"
+$coreos_channel="stable"
 $coreos_name="coreos-" + $coreos_channel 
-$coreos_version="= 668.2.0"
+$coreos_version="= 681.2.0"
 
 $virtualbox_gui = false
 $virtualbox_memory = 1024
