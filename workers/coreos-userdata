@@ -11,21 +11,26 @@ write_files:
         [Service]
         Environment=ETCD_SNAPSHOTCOUNT=50
         Environment=ETCD_SNAPSHOT=false 
+  - path: /etc/systemd/system/etcd.service.d/11-timeout.conf
+    content: |
+        [Service]
+        Environment=ETCD_PEER_HEARTBEAT_INTERVAL=100
+        Environment=ETCD_PEER_ELECTION_TIMEOUT=500
 
 coreos:
   update:
     reboot-strategy: off
-  etcd:
+  etcd2:
     name: worker-$public_ipv4
     discovery: http://172.17.8.2:4001/v2/keys/_etcd/registry/inaetics-cluster-1
-    addr: $public_ipv4:4001
-    bind-addr: 0.0.0.0
-    peer-addr: $public_ipv4:7001
-    peer-bind-addr: 0.0.0.0
+    initial-advertise-peer-urls: http://$public_ipv4:7001
+    listen-peer-urls: http://$public_ipv4:7001
+    listen-client-urls: http://$public_ipv4:4001,http://127.0.0.1:4001
+    advertise-client-urls: http://$public_ipv4:4001
   fleet:
     public-ip: $public_ipv4
   units:
-    - name: etcd.service
+    - name: etcd2.service
       command: start
     - name: fleet.service
       command: start
