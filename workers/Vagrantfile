@@ -7,7 +7,7 @@ Vagrant.require_version ">= 1.6.0"
 ###################################################################
 ##### Configuration ###############################################
 ##################################################################
-$num_instances=2 #number of worker instances
+$num_instances=5 #number of worker instances
 
 printf("Vagrant configured for %d inaetics workers\n", $num_instances)
 
