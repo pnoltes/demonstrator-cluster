@@ -14,12 +14,13 @@ printf("Vagrant configured for %d inaetics workers\n", $num_instances)
 Vagrant.configure("2") do |config|
 	$coreos_channel="stable"
 	$coreos_name="coreos-" + $coreos_channel 
-	$coreos_version="= 681.2.0"
+	$coreos_version="= 723.3.0"
 	config.vm.box = $coreos_name
 	config.vm.box_version = $coreos_version
 	config.vm.box_url = "http://" + $coreos_channel + ".release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
 
 	config.vm.synced_folder "inaetics/", "/opt/inaetics", type: "rsync"
+	config.vm.synced_folder "../docker-images/provisioning/bundles", "/opt/inaetics/bundles", type: "rsync"
 			
 	config.vm.provision :shell, :inline => "ln -s /opt/inaetics/bin /opt/bin", :privileged => true
 
