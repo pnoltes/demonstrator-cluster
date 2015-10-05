@@ -1,6 +1,10 @@
-# INAETICS demonstrator cluster
+
+
+# INAETICS demonstrator cluster 
 
 This repository containts the INAETICS demonstrator environment based on CoreOS preconfigured for Vagrant and VirtualBox.
+
+**Note: Due to the further development based on kubernetes, this demonstrator setup might not work any more. Hence, it is recommended to use the kubenetes-demo-cluster**
 
 ## Run the demonstrator in Vagrant
 
